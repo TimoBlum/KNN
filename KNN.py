@@ -20,19 +20,17 @@ win.fill((255, 255, 255))
 def loading():
     print('making new Point...')
     pygame.time.wait(400)
-    print('______')
+    print('_____')
     pygame.time.wait(400)
-    print('|_____')
+    print('|____')
     pygame.time.wait(400)
-    print('||____')
+    print('||___')
     pygame.time.wait(400)
-    print('|||___')
+    print('|||__')
     pygame.time.wait(400)
-    print('||||__')
+    print('||||_')
     pygame.time.wait(400)
-    print('|||||_')
-    pygame.time.wait(400)
-    print('||||||')
+    print('|||||')
 
 
 def yn(a, c):
@@ -45,12 +43,16 @@ def yn(a, c):
         return False
 
 
-def drawO(win, center, color):
-    """Draws a Point on the screen, with color being randomly 1 (RED) or 0 (BLUE) by randPos()"""
-    if color == 1:
+def drawOI(win, center, color, OI, endpos=()):
+    """Draws a either a line or a point on the screen, with color being randomly 1 (RED) or 0 (BLUE) by randPos()"""
+    if color == 1 and OI == 'O':
         pygame.draw.circle(win, (255, 0, 0), center, 7, 20)
-    else:
+    elif color == 1 and OI == 'I':
+        pygame.draw.line(win, (255, 0, 0), center, endpos, width=1)
+    elif color == 0 and OI == 'O':
         pygame.draw.circle(win, (0, 0, 255), center, 7, 20)
+    else:
+        pygame.draw.line(win, (0, 0, 255), center, endpos, width=1)
 
 
 def euclidian(x1, y1, x2, y2):
@@ -83,16 +85,19 @@ def redrawGameWin(neighbours):
     global firstTime
 
     for foo in positions:
-        drawO(win, (foo[1][0], foo[1][1]), foo[1][2])
+        drawOI(win, (foo[1][0], foo[1][1]), foo[1][2], 'O')
         # draw at the given coordinates (foo[1][0], foo[1][1]) with foo[1][2] being the deciding factor for color
+    pygame.draw.circle(win, (0, 0, 0), (newposition[0], newposition[1]), neighbours[-1][1][3], width=1)
     if firstTime:
         pygame.draw.circle(win, (0, 255, 0), (newposition[0], newposition[1]), 7, 20)
+        for n in neighbours:
+            drawOI(win, (newposition[0], newposition[1]), n[1][2], 'I', endpos=(n[1][0], n[1][1]))
+        pygame.display.update()
+        pygame.time.wait(6000)
     elif not firstTime:
-        drawO(win, (newposition[0], newposition[1]), newposition[2])
-    pygame.draw.circle(win, (0, 0, 0), (newposition[0], newposition[1]), neighbours[-1][1][3], width=1)
+        drawOI(win, (newposition[0], newposition[1]), newposition[2], 'O')
 
     pygame.display.update()
-    pygame.time.wait(6000)
     firstTime = False
 
 
