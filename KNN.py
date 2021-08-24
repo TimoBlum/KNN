@@ -3,7 +3,7 @@ import math, random
 
 pygame.init()
 
-xy = 500
+xy = 800
 blueV = 0
 blueCounter = 0
 redV = 0
@@ -60,13 +60,13 @@ def euclidian(x1, y1, x2, y2):
 
 
 def randPos(lis):
-    for _ in range(0, 90):
+    for _ in range(0, 200):
         lis.append((_, [random.randrange(0, stop=xy - 15), random.randrange(0, stop=xy - 15), random.randint(0, 1), 0]))
 
 
 def makeNewPoint():
     """makes a new point"""
-    loading()
+    # loading()
     ls = [random.randint(15, xy - 15), random.randrange(15, stop=xy - 15)]
     return ls
 
@@ -105,10 +105,9 @@ def main():
     global redV, blueV, redCounter, blueCounter
     randPos(positions)
     addDistance(newposition)
-    neighbours = input("amount of nearest neighbours (2-100): ")
+    neighbours = input("amount of nearest neighbours (2-200): ")
     positions.sort(key=lambda x: x[1][3])  # Sort the positions based on their distance to the new point
     neighbours = positions[:int(neighbours)]
-    print(neighbours)
 
     # Adds up the distance to all of the blue and red points separately
     for ne in neighbours:
@@ -118,11 +117,13 @@ def main():
         else:
             blueV += ne[1][3]
             blueCounter += 1
-    # The lowest of the to added up distance values is the winner of the classification
-    if redV / redCounter > blueV / blueCounter:
+    # The lowest of the two added up distance values is the winner of the classification
+    if redV / redCounter**2 > blueV / blueCounter**2:
         newposition.append(0)
     else:
         newposition.append(1)
+
+    print(blueV, redV)
 
     run = True
     while run:
